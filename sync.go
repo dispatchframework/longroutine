@@ -5,14 +5,14 @@ package longroutine
 
 import "sync"
 
-// Starter should start no more than one (potentially long-running) concurrent go routine for a given key
-type Starter interface {
-	// Start no more than one instance of (potentially long-running) routine `f` gets started for a given `key`
-	Start(key string, f func())
+// SingleStarter should start no more than one (potentially long-running) concurrent go routine for a given key
+type SingleStarter interface {
+	// StartSingle instance of (potentially long-running) routine `f` gets started for the given `key`
+	StartSingle(key string, f func())
 }
 
-// NewStarter creates a Starter
-func NewStarter() Starter {
+// NewSingleStarter creates a SingleStarter
+func NewSingleStarter() SingleStarter {
 	return &syncStarter{
 		m: map[string]struct{}{},
 	}
@@ -24,7 +24,7 @@ type syncStarter struct {
 	m map[string]struct{}
 }
 
-func (s *syncStarter) Start(key string, f func()) {
+func (s *syncStarter) StartSingle(key string, f func()) {
 	s.Lock()
 	defer s.Unlock()
 

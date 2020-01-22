@@ -13,7 +13,7 @@ import (
 )
 
 func TestSyncStarter_Start(t *testing.T) {
-	starter := longroutine.NewStarter()
+	starter := longroutine.NewSingleStarter()
 
 	started := &sync.WaitGroup{}
 	started.Add(1)
@@ -24,7 +24,7 @@ func TestSyncStarter_Start(t *testing.T) {
 	c := make(chan struct{}, 10)
 
 	for range [10]struct{}{} {
-		starter.Start("one-long", func() {
+		starter.StartSingle("one-long", func() {
 			c <- struct{}{}
 			started.Done() // will rightfully panic if more than one of these are called concurrently
 
@@ -40,7 +40,7 @@ func TestSyncStarter_Start(t *testing.T) {
 	for range [10]struct{}{} {
 		started.Wait()
 		started.Add(1)
-		starter.Start("many-short", func() {
+		starter.StartSingle("many-short", func() {
 			c <- struct{}{}
 			started.Done()
 		})
