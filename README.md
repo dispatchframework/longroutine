@@ -3,7 +3,7 @@ Long running go routines (if you absolutely need them) for Kubernetes controller
 
 ## Usage
 
-Add `longroutine.Starter` as one of your reconciler fields. Start your go routines with  
+Add `longroutine.Starter` as one of your reconciler fields. Start your go routines with StartSingle() method:
 
 ```go
 package whatever
